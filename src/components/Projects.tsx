@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import SectionHeading from "@/src/components/SectionHeading";
 import { useLanguage, type Localized } from "@/src/i18n/LanguageContext";
 
@@ -11,6 +13,7 @@ const projects: {
   title: string;
   description: Localized;
   tech: string[];
+  image?: string;
   upcoming?: boolean;
 }[] = [
   {
@@ -20,6 +23,7 @@ const projects: {
       en: "Full-stack desktop and web application for administration, planning, and work orders, paired with an offline-first mobile PWA for field technicians.",
     },
     tech: ["C#", ".NET 8", "Blazor WASM", "SQLite"],
+    image: "/vmm.png",
   },
   {
     title: "Mixed Reality CPR-Training (PoC)",
@@ -36,6 +40,7 @@ const projects: {
       en: "Multi-tenant SaaS platform for multicultural associations (MVP in production). Features seamless member management and smart payment links sent directly via WhatsApp.",
     },
     tech: ["C#", ".NET Core", "Blazor", "Stripe", "Twilio API", "Clean Architecture"],
+    image: "/civitas.png",
   },
   {
     title: "Nextline Digital",
@@ -50,6 +55,10 @@ const projects: {
 
 export default function Projects() {
   const { lang } = useLanguage();
+  const [activeImage, setActiveImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
 
   return (
     <section
@@ -65,17 +74,35 @@ export default function Projects() {
               key={project.title}
               className="group flex flex-col overflow-hidden rounded-xl border border-border-subtle bg-surface transition-all duration-300 hover:border-accent/40 hover:shadow-[0_0_30px_-8px_rgba(124,156,255,0.35)]"
             >
-              {/* Image placeholder */}
-              <div className="relative flex aspect-video items-center justify-center bg-[#1c1c21]">
-                <span className="font-mono text-xs uppercase tracking-wider text-muted/60">
-                  {previewLabel[lang]}
-                </span>
-                {project.upcoming && (
+              {/* Project visual */}
+              {project.upcoming ? (
+                <div className="relative h-48 w-full bg-gradient-to-br from-gray-800 to-gray-900 sm:h-56">
                   <span className="absolute right-3 top-3 rounded-full border border-accent/40 bg-accent/10 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wider text-accent">
                     {upcomingLabel[lang]}
                   </span>
-                )}
-              </div>
+                </div>
+              ) : project.image ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveImage({ src: project.image!, alt: project.title })
+                  }
+                  className="relative h-48 w-full cursor-zoom-in overflow-hidden sm:h-56"
+                  aria-label={`${project.title} — ${previewLabel[lang]}`}
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+                  />
+                </button>
+              ) : (
+                <div className="relative flex h-48 w-full items-center justify-center bg-[#1c1c21] sm:h-56">
+                  <span className="font-mono text-xs uppercase tracking-wider text-muted/60">
+                    {previewLabel[lang]}
+                  </span>
+                </div>
+              )}
 
               <div className="flex flex-1 flex-col p-6">
                 <h3 className="text-lg font-semibold text-foreground transition-colors group-hover:text-accent">
@@ -99,6 +126,31 @@ export default function Projects() {
           ))}
         </div>
       </div>
+
+      {activeImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={activeImage.alt}
+          onClick={() => setActiveImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-6 backdrop-blur-sm"
+        >
+          <button
+            type="button"
+            onClick={() => setActiveImage(null)}
+            aria-label="Close"
+            className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-2xl leading-none text-white/80 transition-colors hover:border-white/40 hover:text-white"
+          >
+            &times;
+          </button>
+          <img
+            src={activeImage.src}
+            alt={activeImage.alt}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[90vh] max-w-[90vw] object-contain"
+          />
+        </div>
+      )}
     </section>
   );
 }
