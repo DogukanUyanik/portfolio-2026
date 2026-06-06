@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-border-subtle: var(--border-subtle);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Dark by default, regardless of system preference */
+  --background: #0a0a0b;
+  --foreground: #ededed;
+  --surface: #131316;
+  --border-subtle: #26262b;
+  --muted: #a1a1aa;
+  --accent: #7c9cff;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Offset anchored sections for the fixed navbar */
+  scroll-padding-top: 5rem;
+  color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  /* Subtle ambient glow at the top of the page */
+  background-image: radial-gradient(
+    60rem 40rem at 50% -10rem,
+    rgba(124, 156, 255, 0.08),
+    transparent 70%
+  );
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+::selection {
+  background: rgba(124, 156, 255, 0.25);
 }
