@@ -8,12 +8,15 @@ import { useLanguage, type Localized } from "@/src/i18n/LanguageContext";
 const heading: Localized = { nl: "Projecten", en: "Projects" };
 const previewLabel: Localized = { nl: "Voorbeeld", en: "Preview" };
 const upcomingLabel: Localized = { nl: "Binnenkort", en: "Upcoming" };
+const demoLabel: Localized = { nl: "Volledige Demo ↗", en: "Full Demo ↗" };
 
 const projects: {
   title: string;
   description: Localized;
   tech: string[];
   image?: string;
+  video?: string;
+  link?: string;
   upcoming?: boolean;
 }[] = [
   {
@@ -32,6 +35,8 @@ const projects: {
       en: "Bachelor's thesis (Meta Quest 3). Reverse-engineered BLE protocols of CPR dummies to provide real-time, spatial (passthrough) visual and auditory feedback based on didactic scaffolding.",
     },
     tech: ["Unity", "C#", "Meta SDK", "BLE"],
+    video: "/mr-cpr.mp4",
+    link: "https://www.linkedin.com/feed/update/urn:li:activity:7450258437176946690/",
   },
   {
     title: "Civitas (SaaS)",
@@ -81,6 +86,27 @@ export default function Projects() {
                     {upcomingLabel[lang]}
                   </span>
                 </div>
+              ) : project.video ? (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative block h-48 w-full overflow-hidden sm:h-56 cursor-pointer"
+                >
+                  <video
+                    src={project.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <span className="rounded-full bg-black/70 px-4 py-2 font-mono text-xs font-semibold tracking-wider text-white backdrop-blur-sm">
+                      {demoLabel[lang]}
+                    </span>
+                  </div>
+                </a>
               ) : project.image ? (
                 <button
                   type="button"
