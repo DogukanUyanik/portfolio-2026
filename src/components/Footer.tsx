@@ -24,8 +24,8 @@ const t = {
 const contacts: { label: Localized; href: string; display: string }[] = [
   {
     label: { nl: "GitHub", en: "GitHub" },
-    href: "https://github.com/DogukanUyanik04",
-    display: "github.com/DogukanUyanik04",
+    href: "https://github.com/DogukanUyanik",
+    display: "github.com/DogukanUyanik",
   },
   {
     label: { nl: "LinkedIn", en: "LinkedIn" },
